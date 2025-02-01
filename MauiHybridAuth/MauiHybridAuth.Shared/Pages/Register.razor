@@ -2,7 +2,7 @@
     <h1>Register</h1>
 </div>
 
-@if (!registerResponse.IsSuccessFull)
+@if (!registerResponse.IsSuccessFull && registerResponse.ErrorMessage != null)
 {
     <div class="alert alert-danger">@registerResponse.ErrorMessage</div>
 }
