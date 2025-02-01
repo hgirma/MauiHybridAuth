@@ -1,10 +1,11 @@
+using Girmanators.Server.Endpoints;
 using MauiHybridAuth.Shared.Services;
 using MauiHybridAuth.Web.Components;
-using MauiHybridAuth.Web.Services;
-using MauiHybridAuth.Web.Data;
 using MauiHybridAuth.Web.Components.Account;
-using Microsoft.AspNetCore.Authorization.Policy;
+using MauiHybridAuth.Web.Data;
+using MauiHybridAuth.Web.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization.Policy;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -34,7 +35,7 @@ builder.Services.AddAuthentication(options =>
     options.DefaultScheme = IdentityConstants.ApplicationScheme;
     options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
 });
- 
+
 builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddSignInManager()
@@ -69,7 +70,7 @@ if (app.Environment.IsDevelopment())
     }
     app.UseMigrationsEndPoint();
     app.UseSwagger();
-    app.UseSwaggerUI();    
+    app.UseSwaggerUI();
 }
 else
 {
@@ -89,5 +90,7 @@ app.MapRazorComponents<App>()
     .AddAdditionalAssemblies(typeof(MauiHybridAuth.Shared._Imports).Assembly);
 
 app.MapAdditionalIdentityEndpoints();
+
+app.MapAccountManagementEndpoint();
 
 app.Run();

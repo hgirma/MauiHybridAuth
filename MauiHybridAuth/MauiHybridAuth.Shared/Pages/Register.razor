@@ -1,0 +1,63 @@
+﻿<div>
+    <h1>Register</h1>
+</div>
+
+@if (!registerResponse.IsSuccessFull)
+{
+    <div class="alert alert-danger">@registerResponse.ErrorMessage</div>
+}
+
+<div class="col-md-6">
+    <EditForm Model="@registerRequest" OnValidSubmit="@SubmitValidFormAsync">
+        <DataAnnotationsValidator />
+        <div class="form-floating mb-3">
+            <InputText @bind-Value="@registerRequest.Email"
+                       class="form-control"
+                       id="inputEmail" />
+            <label for="inputEmail">Email</label>
+            <ValidationMessage For="() => registerRequest.Email" />
+        </div>
+        <div class="form-floating mb-3">
+            <InputText @bind-Value="@registerRequest.Password"
+                       type="password"
+                       class="form-control"
+                       id="inputPassword" />
+            <label for="inputPassword">Password</label>
+            <ValidationMessage For="() => registerRequest.Password" />
+        </div>
+        <div class="form-floating mb-3">
+            <InputText @bind-Value="@registerRequest.ConfirmPassword"
+                       type="password"
+                       class="form-control"
+                       id="inputConfirmPassword" />
+            <label for="inputConfirmPassword">Confirm password</label>
+            <ValidationMessage For="() => registerRequest.ConfirmPassword" />
+        </div>
+        <button type="submit" class="btn btn-primary">Register</button>
+    </EditForm>
+</div>
+
+@code {
+    @page "/register"
+
+    @inject NavigationManager NavigationManager
+    @inject IRegisterService userService
+
+    RegisterRequest registerRequest = new RegisterRequest();
+
+    RegisterResponse registerResponse = new RegisterResponse();
+
+    async Task SubmitValidFormAsync()
+    {
+        registerResponse = await userService.RegisterAsync(registerRequest);
+
+        if (registerResponse.IsSuccessFull)
+        {
+            NavigationManager.NavigateTo("/login");
+        }
+        else
+        {
+            StateHasChanged();
+        }
+    }
+}
